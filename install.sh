@@ -5,7 +5,10 @@ GREEN='\e[32m'
 YELLOW='\e[33m'
 RED='\e[31m'
 BLUE='\e[34m'
+WHITE='\e[97m'
+ORANGE='\e[38;5;208m'
 NC='\e[0m'
+
 
 # Função para mostrar spinner de carregamento
 spinner() {
@@ -24,7 +27,7 @@ spinner() {
 
 # Função para verificar requisitos do sistema
 check_system_requirements() {
-    echo -e "${BLUE}Verificando requisitos do sistema...${NC}"
+    echo -e "${ORANGE}Verificando requisitos do sistema...${NC}"
     
     # Verificar espaço em disco (em GB, removendo a unidade 'G')
     local free_space=$(df -BG / | awk 'NR==2 {print $4}' | tr -d 'G')
@@ -60,9 +63,9 @@ show_animated_logo() {
 
 # Função para mostrar um banner colorido
 function show_banner() {
-    echo -e "${GREEN}=============================================================================="
+    echo -e "${BLUE}=============================================================================="
     echo -e "=                                                                            ="
-    echo -e "=                 ${YELLOW}Preencha as informações solicitadas abaixo${GREEN}                 ="
+    echo -e "=                 ${ORANGE}Preencha as informações solicitadas abaixo${GREEN}                 ="
     echo -e "=                                                                            ="
     echo -e "==============================================================================${NC}"
 }
@@ -99,13 +102,9 @@ show_step 2
 read -p "🌐 Dominio do Traefik (ex: traefik.seudominio.com): " traefik
 echo ""
 show_step 3
-read -s -p "🔏 Senha do Traefik: " senha
-echo ""
-echo ""
-show_step 4
 read -p "🌐 Dominio do Portainer (ex: portainer.seudominio.com): " portainer
 echo ""
-show_step 5
+show_step 4
 read -p "🌐 Dominio do Edge (ex: edge.seudominio.com): " edge
 echo ""
 
@@ -113,11 +112,10 @@ echo ""
 clear
 echo -e "${BLUE}📋 Resumo das Informações${NC}"
 echo -e "${GREEN}================================${NC}"
-echo -e "📧 Seu E-mail: ${YELLOW}$email${NC}"
-echo -e "🌐 Dominio do Traefik: ${YELLOW}$traefik${NC}"
-echo -e "🔑 Senha do Traefik: ${YELLOW}********${NC}"
-echo -e "🌐 Dominio do Portainer: ${YELLOW}$portainer${NC}"
-echo -e "🌐 Dominio do Edge: ${YELLOW}$edge${NC}"
+echo -e "📧 Seu E-mail: ${ORANGE}$email${NC}"
+echo -e "🌐 Dominio do Traefik: ${ORANGE}$traefik${NC}"
+echo -e "🌐 Dominio do Portainer: ${ORANGE}$portainer${NC}"
+echo -e "🌐 Dominio do Edge: ${ORANGE}$edge${NC}"
 echo -e "${GREEN}================================${NC}"
 echo ""
 
@@ -183,8 +181,8 @@ services:
       - "traefik.http.routers.traefik-dashboard.entrypoints=websecure"
       - "traefik.http.routers.traefik-dashboard.service=api@internal"
       - "traefik.http.routers.traefik-dashboard.tls.certresolver=leresolver"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=$senha"
-      - "traefik.http.routers.traefik-dashboard.middlewares=traefik-auth"
+      # - "traefik.http.middlewares.traefik-auth.basicauth.users=$senha"
+      # - "traefik.http.routers.traefik-dashboard.middlewares=traefik-auth"
   portainer:
     image: portainer/portainer-ce:latest
     command: -H unix:///var/run/docker.sock
